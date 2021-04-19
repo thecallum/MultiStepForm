@@ -1,0 +1,38 @@
+﻿@model MultiStepFormMVC.Models.AddressDetailsViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddressDetails</title>
+</head>
+<body>
+    @using (Html.BeginForm("AddressDetails", "Home", FormMethod.Post))
+    {
+        <h1>Step 2 : Address Details</h1>
+        @Html.LabelFor(m => m.Address)<br />
+        @Html.TextBoxFor(m => m.Address)
+        @Html.ValidationMessageFor(m => m.Address)
+        <br />
+        @Html.LabelFor(m => m.City)<br />
+        @Html.TextBoxFor(m => m.City)
+        @Html.ValidationMessageFor(m => m.City)
+        <br />
+        @Html.LabelFor(m => m.Country)<br />
+        @Html.TextBoxFor(m => m.Country)
+        @Html.ValidationMessageFor(m => m.Country)
+        <br />
+        @Html.LabelFor(m => m.PostCode)<br />
+        @Html.TextBoxFor(m => m.PostCode)
+        @Html.ValidationMessageFor(m => m.PostCode)
+        <br />
+        <input type="submit" name="prevBtn" value='Previous' />
+        <input type="submit" name="nextBtn" value='Next' />
+    }
+</body>
+</html>

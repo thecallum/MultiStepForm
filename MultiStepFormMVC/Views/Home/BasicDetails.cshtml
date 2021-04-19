@@ -1,11 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MultiStepFormMVC.Models.BasicDetailsViewModel
+
 @{
+    Layout = null;
 }
 
+<!DOCTYPE html>
 
-
-<h1>Basic details</h1>
-
-<p>Number of visits: @ViewBag.NumberOfVisits</p>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>BasicDetails</title>
+</head>
+<body>
+    @using (Html.BeginForm("BasicDetails", "Home", FormMethod.Post))
+    {
+        <h1>Step 1 : Basic Details</h1>
+        @Html.LabelFor(m => m.CustomerID)<br />
+        @Html.TextBoxFor(m => m.CustomerID)
+        @Html.ValidationMessageFor(m => m.CustomerID)<br />
+        @Html.LabelFor(m => m.CompanyName)<br />
+        @Html.TextBoxFor(m => m.CompanyName)
+        @Html.ValidationMessageFor(m => m.CompanyName)
+        <br />
+        <input type="submit" name="nextBtn" value='Next' />
+    }
+</body>
+</html>

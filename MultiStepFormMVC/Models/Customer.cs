@@ -8,7 +8,7 @@ namespace MultiStepFormMVC.Models
 {
     public class Customer
     {
-        public int Id { get; set; }
+        public string CustomerID { get; set; }
         public string CompanyName { get; set; }
         public string ContactName { get; set; }
         public string ContactTitle { get; set; }
@@ -39,7 +39,7 @@ namespace MultiStepFormMVC.Models
         [Required]
         public string Country { get; set; }
         [Required]
-        public string PostalCode { get; set; }
+        public string PostCode { get; set; }
     }
 
     public class ContactDetailsViewModel

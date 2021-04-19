@@ -1,0 +1,34 @@
+﻿@model MultiStepFormMVC.Models.ContactDetailsViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ContactDetails</title>
+</head>
+<body>
+    @using (Html.BeginForm("ContactDetails", "Home", FormMethod.Post))
+    {
+        <h1>Step 3 : Contact Details</h1>
+        @Html.LabelFor(m => m.ContactName)<br />
+        @Html.TextBoxFor(m => m.ContactName)
+        @Html.ValidationMessageFor(m => m.ContactName)
+        <br />
+        @Html.LabelFor(m => m.Phone)<br />
+        @Html.TextBoxFor(m => m.Phone)
+        @Html.ValidationMessageFor(m => m.Phone)
+        <br />
+        @Html.LabelFor(m => m.Fax)<br />
+        @Html.TextBoxFor(m => m.Fax)
+        @Html.ValidationMessageFor(m => m.Fax)
+        <br />
+        <input type="submit" name="prevBtn" value='Previous' />
+        <input type="submit" name="nextBtn" value='Finish' />
+    }
+</body>
+</html>

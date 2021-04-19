@@ -1,37 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MultiStepFormMVC.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using MultiStepFormMVC.Utils;
 
-namespace MultiStepFormMVC.Controllers
+namespace MultiStepFormMVC.Utils
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private const string SessionName = "SESSION_NAME";
 
-        public HomeController(ILogger<HomeController> logger)
+        public ActionResult Index()
         {
-            _logger = logger;
-        }
+            int numberOfVisits = 0; // default value
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+            var sessionValue = HttpContext.Session.Get<int?>(SessionName);
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            if (sessionValue != null)
+            {
+                numberOfVisits = (int) sessionValue;
+            }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // increment number of visits
+            HttpContext.Session.Set(SessionName, numberOfVisits + 1);
+
+            ViewBag.NumberOfVisits = numberOfVisits;
+
+            return View("BasicDetails");
         }
     }
 }

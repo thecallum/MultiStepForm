@@ -7,29 +7,25 @@ namespace MultiStepFormMVC.Utils
 {
     public class HomeController : Controller
     {
-        private const string SessionName = "SESSION_NAME";
         private const string CustomerSessionKey = "CUSTOMER_SESSION_KEY";
 
         public ActionResult Index()
         {
-            /*
-            int numberOfVisits = 0; // default value
+            return View("Start");
+        }
 
-            var sessionValue = HttpContext.Session.Get<int?>(SessionName);
+        [HttpGet]
+        public ActionResult BasicDetails()
+        {
+            var customer = GetCustomer();
 
-            if (sessionValue != null)
+            var viewModel = new BasicDetailsViewModel
             {
-                numberOfVisits = (int) sessionValue;
-            }
+                CustomerID = customer.CustomerID,
+                CompanyName = customer.CompanyName
+            };
 
-            // increment number of visits
-            HttpContext.Session.Set(SessionName, numberOfVisits + 1);
-
-            ViewBag.NumberOfVisits = numberOfVisits;
-            */
-
-
-            return View("BasicDetails");
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -40,36 +36,49 @@ namespace MultiStepFormMVC.Utils
                 if (ModelState.IsValid)
                 {
                     var customer = GetCustomer();
+
                     customer.CustomerID = data.CustomerID;
                     customer.CompanyName = data.CompanyName;
 
                     SaveCustomer(customer);
 
-                    return View("AddressDetails");
+                    return RedirectToAction("AddressDetails");
                 }
             }
-            return View();
+
+             return View(data);
+        }
+
+        [HttpGet]
+        public ActionResult AddressDetails()
+        {
+            var customer = GetCustomer();
+
+            var viewModel = new AddressDetailsViewModel
+            {
+                Address = customer.Address,
+                City = customer.City,
+                Country = customer.Country,
+                PostCode = customer.PostCode
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult AddressDetails(AddressDetailsViewModel data, string prevBtn, string nextBtn)
         {
-            var customer = GetCustomer();
-
             if (prevBtn != null)
             {
-                var basicDetailsModel = new BasicDetailsViewModel();
-
-
-                basicDetailsModel.CustomerID = customer.CustomerID;
-                basicDetailsModel.CompanyName = customer.CompanyName;
-
-                return View("BasicDetails", basicDetailsModel);
+                return RedirectToAction("BasicDetails");
             }
+
             if (nextBtn != null)
             {
                 if (ModelState.IsValid)
                 {
+                    var customer = GetCustomer();
+
                     customer.Address = data.Address;
                     customer.City = data.City;
                     customer.Country = data.Country;
@@ -77,62 +86,68 @@ namespace MultiStepFormMVC.Utils
 
                     SaveCustomer(customer);
 
-                    return View("ContactDetails");
+                    return RedirectToAction("ContactDetails");
                 }
             }
+
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ContactDetails()
+        {
+            var customer = GetCustomer();
+
+            var viewModel = new ContactDetailsViewModel
+            {
+               ContactName = customer.ContactName,
+               Fax = customer.Fax,
+               Phone = customer.Phone
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult ContactDetails(ContactDetailsViewModel data, string prevBtn, string nextBtn)
         {
-            var customer = GetCustomer();
-
             if (prevBtn != null)
             {
-                var addressDetailsViewModel = new AddressDetailsViewModel();
-
-                addressDetailsViewModel.Address = customer.Address;
-                addressDetailsViewModel.City = customer.City;
-                addressDetailsViewModel.Country = customer.Country;
-                addressDetailsViewModel.PostCode = customer.PostCode;
-
-                return View("AddressDetails", addressDetailsViewModel);
+                return RedirectToAction("AddressDetails");
             }
-            if (nextBtn != null)
-            {
-                customer.ContactName = data.ContactName;
-                customer.Phone = data.Phone;
-                customer.Fax = data.Fax;
 
-                SaveCustomer(customer);
-
+            if (nextBtn != null) { 
 
                 if (ModelState.IsValid)
                 {
-                    //customer.ContactName = data.ContactName;
-                    //customer.Phone = data.Phone;
-                    //customer.Fax = data.Fax;
+                    var customer = GetCustomer();
 
+                    customer.ContactName = data.ContactName;
+                    customer.Phone = data.Phone;
+                    customer.Fax = data.Fax;
 
-                    //NorthwindEntities db = new NorthwindEntities();
-                    //db.Customers.Add(obj);
-                    //db.SaveChanges();
+                    SaveCustomer(customer);
 
                     // Save to db
 
                     RemoveCustomer();
-                    return View("Success");
-                }
 
+                    return RedirectToAction("Success");
+                }
             }
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Success()
+        {
             return View();
         }
 
         private void SaveCustomer(Customer customer)
         {
             HttpContext.Session.Set<Customer>(CustomerSessionKey, customer);
-
         }
 
         private Customer GetCustomer()
